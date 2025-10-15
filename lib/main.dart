@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'pages/admin_page.dart';
@@ -21,7 +20,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'مطعم الذكاء ',
       theme: ThemeData(primarySwatch: Colors.orange),
-      home:  HomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/admin': (context) => AdminPage(),
+        '/menu1': (context) => MenuPage(tableNumber: 1),
+        '/menu2': (context) => MenuPage(tableNumber: 2),
+        '/menu3': (context) => MenuPage(tableNumber: 3),
+      },
     );
   }
 }
@@ -39,34 +45,26 @@ class HomePage extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) =>  MenuPage(tableNumber: 1),
-                ));
+                Navigator.pushNamed(context, '/menu1');
               },
               child:  Text(" طاولة 1"),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) =>  MenuPage(tableNumber: 2),
-                ));
+                Navigator.pushNamed(context, '/menu2');
               },
               child:  Text(" طاولة 2"),
             ),//
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) =>  MenuPage(tableNumber: 3),
-                ));
+                Navigator.pushNamed(context, '/menu3');
               },
               child:  Text(" طاولة 3"),
             ),
              SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) =>  AdminPage(),
-                ));
+                Navigator.pushNamed(context, '/admin');
               },
               child:  Text(" صفحة الأدمن"),
             ),
