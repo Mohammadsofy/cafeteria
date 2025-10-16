@@ -16,7 +16,7 @@ class MenuItem {
 
 class MenuPage extends StatefulWidget {
   final int tableNumber;
-  const MenuPage({Key? key, required this.tableNumber}) : super(key: key);
+  const MenuPage({super.key, required this.tableNumber});
 
   @override
   State<MenuPage> createState() => _MenuPageState();
@@ -73,7 +73,9 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   void dispose() {
-    controllers.values.forEach((c) => c.dispose());
+    for (var c in controllers.values) {
+      c.dispose();
+    }
     scrollController.dispose();
     super.dispose();
   }
@@ -115,7 +117,9 @@ class _MenuPageState extends State<MenuPage> {
       SnackBar(content: Text('تم إرسال الطلب إلى المطبخ بنجاح ')),
     );
 
-    controllers.values.forEach((c) => c.clear());
+    for (var c in controllers.values) {
+      c.clear();
+    }
     setState(() {});
   }
 
@@ -213,12 +217,12 @@ class SectionWidget extends StatelessWidget {
   final VoidCallback onChanged;
 
   const SectionWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.items,
     required this.controllers,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +242,7 @@ class SectionWidget extends StatelessWidget {
                 padding: EdgeInsets.all(10),
                 child: Row(
                   children: [
-                    Image.network(item.imageUrl, width: 60, height: 60, fit: BoxFit.cover),
+                    Image.asset(item.imageUrl, width: 60, height: 60, fit: BoxFit.cover),
                     SizedBox(width: 15),
                     Expanded(
                       child: Column(
