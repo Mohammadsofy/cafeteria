@@ -8,8 +8,10 @@ class MenuItem {
   final String imageUrl;
   final String group;
   final double price;
+  final double count;
 
-  MenuItem({required this.name, required this.imageUrl, required this.group, required this.price});
+
+  MenuItem({required this.name, required this.imageUrl, required this.group, required this.price,required this.count});
 }
 
 class MenuPage extends StatefulWidget {
@@ -23,21 +25,30 @@ class MenuPage extends StatefulWidget {
 class _MenuPageState extends State<MenuPage> {
   final List<MenuItem> items = [
 
-    MenuItem(name: "عصير برتقال", imageUrl: "images/OIP.jpg", group: "juices",price: 5),
-    MenuItem(name: "عصير مانجا", imageUrl: "images/OIP.jpg", group: "juices",price: 5),
-    MenuItem(name: "عصير تفاح", imageUrl: "images/OIP.jpg", group: "juices", price: 5),
-    MenuItem(name: "عصير جوافة", imageUrl: "images/OIP.jpg", group: "juices", price: 5),
+    MenuItem(name: "عصير برتقال", imageUrl: "images/OIP.jpg", group: "juices",price: 5,count:0),
+    MenuItem(name: "عصير مانجا", imageUrl: "images/OIP.jpg", group: "juices",price: 5,count:0),
+    MenuItem(name: "عصير تفاح", imageUrl: "images/OIP.jpg", group: "juices", price: 5,count:0),
+    MenuItem(name: "عصير جوافة", imageUrl: "images/OIP.jpg", group: "juices", price: 5,count:0),
 
-    MenuItem(name: "شاورما دجاج", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10),
-    MenuItem(name: "شاورما لحم", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10),
-    MenuItem(name: "فلافل", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10),
-    MenuItem(name: "برجر", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10),
+    MenuItem(name: "شاورما دجاج", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10,count:0),
+    MenuItem(name: "شاورما لحم", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10,count:0),
+    MenuItem(name: "فلافل", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10, count:0),
+    MenuItem(name: "برجر", imageUrl: "images/OIP.jpg", group: "sandwiches",price: 10,count:0),
 
-    MenuItem(name: "وجبة دجاج", imageUrl: "images/OIP.jpg", group: "meals",price: 15),
-    MenuItem(name: "وجبة كفتة", imageUrl: "images/OIP.jpg", group: "meals",price: 15),
-    MenuItem(name: "وجبة سمك", imageUrl: "images/OIP.jpg", group: "meals",price: 15),
-    MenuItem(name: "وجبة كبسة", imageUrl: "images/OIP.jpg", group: "meals",price: 15),
+    MenuItem(name: "وجبة دجاج", imageUrl: "images/OIP.jpg", group: "meals",price: 15,count:0),
+    MenuItem(name: "وجبة كفتة", imageUrl: "images/OIP.jpg", group: "meals",price: 15,count:0),
+    MenuItem(name: "وجبة سمك", imageUrl: "images/OIP.jpg", group: "meals",price: 15,count:0),
+    MenuItem(name: "وجبة كبسة", imageUrl: "images/OIP.jpg", group: "meals",price: 15,count:0),
   ];
+  double get total {
+    double sum = 0;
+    for (var item in items) {
+      final text = controllers[item.hashCode]?.text ?? '';
+      final count = double.tryParse(text) ?? 0;
+      sum += item.price * count;
+    }
+    return sum;
+  }
 
   final Map<int, TextEditingController> controllers = {};
 
@@ -68,24 +79,21 @@ class _MenuPageState extends State<MenuPage> {
   }
 
   Future<void> submitOrder() async {
+    double orderTotal =total;
     List<Map<String, dynamic>> orders = [];
-    double orderTotal =0.0;
     for (var item in items) {
       final value = controllers[item.hashCode]?.text ?? '';
-      if (value.trim().isNotEmpty) {
         final qty=int.tryParse(value) ?? 0;
         if (qty > 0) {
-          final double itemTotal=item.price*qty;
-          orderTotal +=itemTotal;
           orders.add({
             'name': item.name,
             'image': item.imageUrl,
             'number': int.parse(value),
             'price': item.price,
-            'total': itemTotal,
+            'total': item.price * qty,
           });
         }
-      }
+
     }
 
     if (orders.isEmpty) {
@@ -108,6 +116,7 @@ class _MenuPageState extends State<MenuPage> {
     );
 
     controllers.values.forEach((c) => c.clear());
+    setState(() {});
   }
 
   @override
@@ -116,79 +125,81 @@ class _MenuPageState extends State<MenuPage> {
     final sandwiches = items.where((e) => e.group == 'sandwiches').toList();
     final meals = items.where((e) => e.group == 'meals').toList();
 
-    return WillPopScope(
-      onWillPop: () async => false,
-
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text('المنيو',style: TextStyle(color: Colors.white),),
-            backgroundColor: Colors.orange,
-          automaticallyImplyLeading: false,),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('المنيو',style: TextStyle(color: Colors.white),),
+          backgroundColor: Colors.orange,
+        automaticallyImplyLeading: true,),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => scrollToSection("juices"),
+                    child: Text("العصائر"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => scrollToSection("sandwiches"),
+                    child: Text("الشاندويش"),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => scrollToSection("meals"),
+                    child: Text("الوجبات"),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("juices"),
-                      child: Text("العصائر"),
+                    SectionWidget(
+                      key: sectionKeys['juices'],
+                      title: "العصائر",
+                      items: juices,
+                      controllers: controllers,
+                      onChanged: () {setState(() {});},
                     ),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("sandwiches"),
-                      child: Text("الشاندويش"),
+                    SectionWidget(
+                      key: sectionKeys['sandwiches'],
+                      title: "الشاندويش",
+                      items: sandwiches,
+                      controllers: controllers,
+                      onChanged: () {setState(() {});},
                     ),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("meals"),
-                      child: Text("الوجبات"),
+                    SectionWidget(
+                      key: sectionKeys['meals'],
+                      title: "الوجبات",
+                      items: meals,
+                      controllers: controllers,
+                      onChanged: () {setState(() {});},
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                child: SingleChildScrollView(
-                  controller: scrollController,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SectionWidget(
-                        key: sectionKeys['juices'],
-                        title: "العصائر",
-                        items: juices,
-      
-                        controllers: controllers,
-      
-                      ),
-                      SectionWidget(
-                        key: sectionKeys['sandwiches'],
-                        title: "الشاندويش",
-                        items: sandwiches,
-                        controllers: controllers,
-                      ),
-                      SectionWidget(
-                        key: sectionKeys['meals'],
-                        title: "الوجبات",
-                        items: meals,
-                        controllers: controllers,
-                      ),
-                    ],
-                  ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                onPressed: submitOrder,
+                child: Column(
+                  children: [
+                    Text("إرسال الطلب",style: TextStyle(fontSize: 20),),
+                    Text("المجموع: ${total.toStringAsFixed(2)} دينار",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
-                  onPressed: submitOrder,
-                  child: Text("إرسال الطلب"),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -199,12 +210,14 @@ class SectionWidget extends StatelessWidget {
   final String title;
   final List<MenuItem> items;
   final Map<int, TextEditingController> controllers;
+  final VoidCallback onChanged;
 
   const SectionWidget({
     Key? key,
     required this.title,
     required this.items,
     required this.controllers,
+    required this.onChanged,
   }) : super(key: key);
 
   @override
@@ -238,6 +251,7 @@ class SectionWidget extends StatelessWidget {
                     SizedBox(
                       width: 50,
                       child: TextField(
+                        onChanged: (value)=> onChanged(),
                         controller: controllers[item.hashCode],
                         keyboardType: TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: [
