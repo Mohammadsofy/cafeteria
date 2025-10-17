@@ -17,13 +17,16 @@ class _AdminPageState extends State<AdminPage> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("orders")
-            .where("createdAt", isNotEqualTo: null)
             .orderBy("createdAt", descending: true)
             .snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.hasError){
+          return Center(child: Text('حدث خطأ أثناء تحميل البيانات: ${snapshot.error}'));
+          }
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
+
           final orders = snapshot.data?.docs ?? [];
 
           if (orders.isEmpty) {
