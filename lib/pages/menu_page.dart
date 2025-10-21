@@ -95,15 +95,67 @@ class _MenuPageState extends State<MenuPage> {
             'total': item.price * qty,
           });
         }
-
     }
-
     if (orders.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('لم يتم اختيار أي صنف')),
       );
       return;
     }
+
+    bool confirm = await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('تأكيد الطلب'),
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ...orders.map((o) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child:Row(
+                        children: [
+                          Text(o['name'], style: TextStyle(fontSize: 16)),
+                          Text("×${o['number']}"),
+                        ],
+                      ), ),
+                      Text(" الحبة ب ${o['price']}د"),
+                    ],
+                  ),
+                )),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("المجموع الكلي:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    Text("${orderTotal.toStringAsFixed(2)} دينار",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.orange)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('إلغاء'),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text('تأكيد'),
+            ),
+          ],
+        );
+      },
+    );
+
+
+    if (confirm != true) return;
 
     await FirebaseFirestore.instance.collection('orders').add({
       'table': widget.tableNumber,
