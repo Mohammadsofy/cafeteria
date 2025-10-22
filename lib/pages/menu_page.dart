@@ -161,7 +161,7 @@ class _MenuPageState extends State<MenuPage> {
       'table': widget.tableNumber,
       'items': orders,
       'status': 'قيد التحضير',
-      'createdAt': FieldValue.serverTimestamp(),
+      'createdAt': DateTime.now(),
       'total': double.parse(orderTotal.toStringAsFixed(2)),
     });
 

@@ -48,18 +48,29 @@ class _AdminPageState extends State<AdminPage> {
               }).join("\n");
               final total = data['total'] ?? 0;
               final itemsText = items + "\n" + "المجموع: ${total.toString()} د";
-              final createdAt = data['createdAt'] as Timestamp?;
+
+              final createdAtRaw = data['createdAt'];
+              DateTime? createdAt;
+
+              if (createdAtRaw == null) {
+                createdAt = null;
+              } else if (createdAtRaw is DateTime) {
+                createdAt = createdAtRaw;
+              } else if (createdAtRaw is Timestamp) {
+                createdAt = createdAtRaw.toDate();
+              } else if (createdAtRaw is Map && createdAtRaw['_seconds'] != null) {
+                // 🔹 دعم إضافي لبعض الحالات اللي Firestore web برجع فيها timestamp كـ Map
+                createdAt = DateTime.fromMillisecondsSinceEpoch(
+                    (createdAtRaw['_seconds'] * 1000).toInt());
+              } else {
+                print("⚠️ createdAt نوع غير معروف: $createdAtRaw");
+                createdAt = null;
+              }
+
               final timeText = createdAt != null
-                  ? "${createdAt
-                  .toDate()
-                  .hour
-                  .toString()
-                  .padLeft(2, '0')}:${createdAt
-                  .toDate()
-                  .minute
-                  .toString()
-                  .padLeft(2, '0')}"
+                  ? "${createdAt.hour.toString().padLeft(2, '0')}:${createdAt.minute.toString().padLeft(2, '0')}"
                   : "—";
+
 
               return Card(
                 color: Colors.blue,
