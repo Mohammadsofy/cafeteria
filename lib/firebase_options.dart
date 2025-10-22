@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '950613080047',
     projectId: 'order--menu',
     authDomain: 'order--menu.firebaseapp.com',
-storageBucket: 'order--menu.appspot.com',
+    storageBucket: 'order--menu.firebasestorage.app',
     measurementId: 'G-M0SEQ5FSLV',
   );
 
@@ -55,7 +55,7 @@ storageBucket: 'order--menu.appspot.com',
     appId: '1:950613080047:android:a43881fa7a6c25660ce81a',
     messagingSenderId: '950613080047',
     projectId: 'order--menu',
-storageBucket: 'order--menu.appspot.com',
+    storageBucket: 'order--menu.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
