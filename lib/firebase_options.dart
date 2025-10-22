@@ -46,7 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '950613080047',
     projectId: 'order--menu',
     authDomain: 'order--menu.firebaseapp.com',
-    storageBucket: 'order--menu.firebasestorage.app',
+storageBucket: 'order--menu.appspot.com',
     measurementId: 'G-M0SEQ5FSLV',
   );
 
@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
     appId: '1:950613080047:android:a43881fa7a6c25660ce81a',
     messagingSenderId: '950613080047',
     projectId: 'order--menu',
-    storageBucket: 'order--menu.firebasestorage.app',
+storageBucket: 'order--menu.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:950613080047:ios:a841c6a5669daa040ce81a',
     messagingSenderId: '950613080047',
     projectId: 'order--menu',
-    storageBucket: 'order--menu.firebasestorage.app',
+storageBucket: 'order--menu.appspot.com',
     iosBundleId: 'com.example.untitled1',
   );
 
@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
     appId: '1:950613080047:ios:a841c6a5669daa040ce81a',
     messagingSenderId: '950613080047',
     projectId: 'order--menu',
-    storageBucket: 'order--menu.firebasestorage.app',
+storageBucket: 'order--menu.appspot.com',
     iosBundleId: 'com.example.untitled1',
   );
 
@@ -82,7 +82,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '950613080047',
     projectId: 'order--menu',
     authDomain: 'order--menu.firebaseapp.com',
-    storageBucket: 'order--menu.firebasestorage.app',
+storageBucket: 'order--menu.appspot.com',
     measurementId: 'G-6SB3D80WRM',
   );
 }
