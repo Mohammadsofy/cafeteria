@@ -151,7 +151,7 @@ class _MenuPageState extends State<MenuPage> {
     });
   }
   void updateTotal() {
-    setState(() {}); // سيحسب total getter مباشرة
+    setState(() {});
   }
 
 
@@ -246,7 +246,7 @@ class _MenuPageState extends State<MenuPage> {
       'table': widget.tableNumber,
       'items': orders,
       'status': 'قيد التحضير',
-      'createdAt': DateTime.now(),
+      'createdAt': FieldValue.serverTimestamp(),
       'total': double.parse(orderTotal.toStringAsFixed(2)),
     });
 
@@ -273,154 +273,156 @@ class _MenuPageState extends State<MenuPage> {
     final desserts = items.where((e) => e.group == 'desserts').toList();
     final salads = items.where((e) => e.group == 'salads').toList();
 
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text('المنيو',style: TextStyle(color: Colors.white) ,),
+            backgroundColor: Colors.orange,
+          automaticallyImplyLeading:false,),
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("hot_drinks"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("المشروبات الساخنة"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("cold_coffee"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("القهوة الباردة"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("refreshing"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("المشروبات المنعشة"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("natural"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("المشروبات الطبيعية"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("frappe"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("الفرايبه"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("pasta"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("الباستا"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("pizza"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("البيتزا"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("argile"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("الأراجيل"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("desserts"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("الحلويات"),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton(
+                        onPressed: () => scrollToSection("salads"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.orange,
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("السلطات"),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SectionWidget(key: sectionKeys['hot_drinks'], title: "المشروبات الساخنة", items: hotDrinks, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['cold_coffee'], title: "القهوة الباردة", items: coldCoffee, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['refreshing'], title: "المشروبات المنعشة", items: refreshing, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['natural'], title: "المشروبات الطبيعية", items: natural, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['frappe'], title: "الفرايبه", items: frappe, controllers: controllers ,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['pasta'], title: "الباستا", items: pasta, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['pizza'], title: "البيتزا", items: pizza, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['argile'], title: "الأراجيل", items: argile, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['desserts'], title: "الحلويات", items: desserts, controllers: controllers,onChanged: updateTotal),
+                      SectionWidget(key: sectionKeys['salads'], title: "السلطات", items: salads, controllers: controllers,onChanged: updateTotal),
 
-          title: Text('المنيو',style: TextStyle(color: Colors.white) ,),
-          backgroundColor: Colors.orange,
-        automaticallyImplyLeading:true,),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("hot_drinks"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("المشروبات الساخنة"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("cold_coffee"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("القهوة الباردة"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("refreshing"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("المشروبات المنعشة"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("natural"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("المشروبات الطبيعية"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("frappe"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("الفرايبه"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("pasta"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("الباستا"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("pizza"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("البيتزا"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("argile"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("الأراجيل"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("desserts"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("الحلويات"),
-                    ),
-                    const SizedBox(width: 8),
-                    ElevatedButton(
-                      onPressed: () => scrollToSection("salads"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.orange,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text("السلطات"),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SectionWidget(key: sectionKeys['hot_drinks'], title: "المشروبات الساخنة", items: hotDrinks, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['cold_coffee'], title: "القهوة الباردة", items: coldCoffee, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['refreshing'], title: "المشروبات المنعشة", items: refreshing, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['natural'], title: "المشروبات الطبيعية", items: natural, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['frappe'], title: "الفرايبه", items: frappe, controllers: controllers ,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['pasta'], title: "الباستا", items: pasta, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['pizza'], title: "البيتزا", items: pizza, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['argile'], title: "الأراجيل", items: argile, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['desserts'], title: "الحلويات", items: desserts, controllers: controllers,onChanged: updateTotal),
-                    SectionWidget(key: sectionKeys['salads'], title: "السلطات", items: salads, controllers: controllers,onChanged: updateTotal),
-
-                  ],
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
+                  onPressed: submitOrder,
+                  child: Column(
+                    children: [
+                      Text("إرسال الطلب",style: TextStyle(fontSize: 20),),
+                      Text("المجموع: ${total.toStringAsFixed(2)} دينار",style:
+                      const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(minimumSize: Size(double.infinity, 50)),
-                onPressed: submitOrder,
-                child: Column(
-                  children: [
-                    Text("إرسال الطلب",style: TextStyle(fontSize: 20),),
-                    Text("المجموع: ${total.toStringAsFixed(2)} دينار",style:
-                    const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),)
-                  ],
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

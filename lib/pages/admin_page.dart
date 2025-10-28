@@ -11,73 +11,74 @@ class AdminPage extends StatefulWidget {
 class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("لوحة الطلبات"),
-      automaticallyImplyLeading: true,),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("orders")
-            .orderBy("createdAt", descending: true)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError){
-          return Center(child: Text('حدث خطأ أثناء تحميل البيانات: ${snapshot.error}'));
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return WillPopScope(
+      onWillPop: () async => true,
+      child: Scaffold(
+        appBar: AppBar(title: const Text("لوحة الطلبات"),
+        automaticallyImplyLeading: true,),
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("orders")
+              .orderBy("createdAt", descending: true)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError){
+            return Center(child: Text('حدث خطأ أثناء تحميل البيانات: ${snapshot.error}'));
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          final orders = snapshot.data?.docs ?? [];
+            final orders = snapshot.data?.docs ?? [];
 
-          if (orders.isEmpty) {
-            return const Center(child: Text("لا توجد طلبات حالياً"));
-          }
+            if (orders.isEmpty) {
+              return const Center(child: Text("لا توجد طلبات حالياً"));
+            }
 
-          return ListView.builder(
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-            try {
-              final data = orders[index].data() as Map<String, dynamic>;
-              final table = data['table'] ?? '?';
-              final itemsList = data['items'] as List<dynamic>? ?? [];
-              final items = itemsList.map((i) {
-                final name = i['name'] ?? 'غير معروف';
-                final number = i['number'] ?? i['quantity'] ?? 1;
-                final price = i['price'] ?? 0.0;
-                return " ${price * number}  =  $name x$number  ";
-              }).join("\n");
-              final total = data['total'] ?? 0;
-              final itemsText = items + "\n" + "المجموع: ${total.toString()} د";
+            return ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+              try {
+                final data = orders[index].data() as Map<String, dynamic>;
+                final table = data['table'] ?? '?';
+                final itemsList = data['items'] as List<dynamic>? ?? [];
+                final items = itemsList.map((i) {
+                  final name = i['name'] ?? 'غير معروف';
+                  final number = i['number'] ?? i['quantity'] ?? 1;
+                  final price = i['price'] ?? 0.0;
+                  return " ${price * number}  =  $name x$number  ";
+                }).join("\n");
+                final total = data['total'] ?? 0;
+                final itemsText = items + "\n" + "المجموع: ${total.toString()} د";
 
-              final createdAtRaw = data['createdAt'];
-              DateTime? createdAt;
+                final createdAtRaw = data['createdAt'];
+                DateTime? createdAt;
 
-              if (createdAtRaw == null) {
-                createdAt = null;
-              } else if (createdAtRaw is DateTime) {
-                createdAt = createdAtRaw;
-              } else if (createdAtRaw is Timestamp) {
-                createdAt = createdAtRaw.toDate();
-              } else if (createdAtRaw is Map && createdAtRaw['_seconds'] != null) {
-                // 🔹 دعم إضافي لبعض الحالات اللي Firestore web برجع فيها timestamp كـ Map
-                createdAt = DateTime.fromMillisecondsSinceEpoch(
-                    (createdAtRaw['_seconds'] * 1000).toInt());
-              } else {
-                print("⚠️ createdAt نوع غير معروف: $createdAtRaw");
-                createdAt = null;
-              }
+                if (createdAtRaw == null) {
+                  createdAt = null;
+                } else if (createdAtRaw is DateTime) {
+                  createdAt = createdAtRaw;
+                } else if (createdAtRaw is Timestamp) {
+                  createdAt = createdAtRaw.toDate();
+                } else if (createdAtRaw is Map && createdAtRaw['_seconds'] != null) {
+                  // 🔹 دعم إضافي لبعض الحالات اللي Firestore web برجع فيها timestamp كـ Map
+                  createdAt = DateTime.fromMillisecondsSinceEpoch(
+                      (createdAtRaw['_seconds'] * 1000).toInt());
+                } else {
+                  print("⚠️ createdAt نوع غير معروف: $createdAtRaw");
+                  createdAt = null;
+                }
 
-              final timeText = createdAt != null
-                  ? "${createdAt.hour.toString().padLeft(2, '0')}:${createdAt.minute.toString().padLeft(2, '0')}"
-                  : "—";
+                final timeText = createdAt != null
+                    ? "${createdAt.hour.toString().padLeft(2, '0')}:${createdAt.minute.toString().padLeft(2, '0')}"
+                    : "—";
 
 
-              return Card(
-                color: Colors.blue,
-                margin: const EdgeInsets.all(8),
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Expanded(
+                return Card(
+                  color: Colors.blue,
+                  margin: const EdgeInsets.all(8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
                     child: Row(
                       children: [
                         const Icon(Icons.access_time, size: 16),
@@ -143,16 +144,16 @@ class _AdminPageState extends State<AdminPage> {
                       ],
                     ),
                   ),
-                ),
 
-              );
-            }catch (e){
-              print("Error parsing order data: $e");
-              return const SizedBox.shrink();
-            }
-            },
-          );
-        },
+                );
+              }catch (e){
+                print("Error parsing order data: $e");
+                return const SizedBox.shrink();
+              }
+              },
+            );
+          },
+        ),
       ),
     );
   }
