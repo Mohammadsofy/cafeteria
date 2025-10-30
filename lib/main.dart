@@ -51,7 +51,6 @@ class _MyAppState extends State<MyApp> {
 
 class HomePage extends StatefulWidget {
    HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -67,26 +66,26 @@ class _HomePageState extends State<HomePage> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/menu1');
+                Navigator.pushReplacementNamed(context, '/menu1');
               },
               child:  Text(" طاولة 1"),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/menu2');
+                Navigator.pushReplacementNamed(context, '/menu2');
               },
               child:  Text(" طاولة 2"),
             ),//
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/menu3');
+                Navigator.pushReplacementNamed(context, '/menu3');
               },
               child:  Text(" طاولة 3"),
             ),
              SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/admin');
+                Navigator.pushReplacementNamed(context, '/admin');
               },
               child:  Text(" صفحة الأدمن"),
             ),
