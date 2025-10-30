@@ -12,10 +12,10 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(title: const Text("لوحة الطلبات"),
-        automaticallyImplyLeading: true,),
+        automaticallyImplyLeading: false,),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection("orders")
@@ -61,7 +61,6 @@ class _AdminPageState extends State<AdminPage> {
                 } else if (createdAtRaw is Timestamp) {
                   createdAt = createdAtRaw.toDate();
                 } else if (createdAtRaw is Map && createdAtRaw['_seconds'] != null) {
-                  // 🔹 دعم إضافي لبعض الحالات اللي Firestore web برجع فيها timestamp كـ Map
                   createdAt = DateTime.fromMillisecondsSinceEpoch(
                       (createdAtRaw['_seconds'] * 1000).toInt());
                 } else {
@@ -75,7 +74,7 @@ class _AdminPageState extends State<AdminPage> {
 
 
                 return Card(
-                  color: Colors.blue,
+                  color: Colors.white.withOpacity(0.0),
                   margin: const EdgeInsets.all(8),
                   child: Padding(
                     padding: const EdgeInsets.all(20),
@@ -125,9 +124,9 @@ class _AdminPageState extends State<AdminPage> {
                                 padding: const EdgeInsets.all(8),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
-                                    color: Colors.deepOrange,
+                                    color: Colors.green.withOpacity(0.5),
                                     border: Border.all(
-                                    color: Colors.deepOrange,
+                                    color: Colors.white.withOpacity(0.0),
 
                                     width: 2,
                                   )

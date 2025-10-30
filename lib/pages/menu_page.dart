@@ -2,6 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 class MenuItem {
@@ -218,7 +220,7 @@ class _MenuPageState extends State<MenuPage> {
                   children: [
                     Text("المجموع الكلي:", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     Text("${orderTotal.toStringAsFixed(2)} دينار",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.orange)),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green)),
                   ],
                 ),
               ],
@@ -230,7 +232,7 @@ class _MenuPageState extends State<MenuPage> {
               child: Text('إلغاء'),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               onPressed: () => Navigator.of(context).pop(true),
               child: Text('تأكيد'),
             ),
@@ -259,6 +261,13 @@ class _MenuPageState extends State<MenuPage> {
     }
     setState(() {});
   }
+  Future<void> _instagram() async {
+    final url = Uri.parse("https://www.instagram.com/na7ieh/");
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication))
+    {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -274,17 +283,74 @@ class _MenuPageState extends State<MenuPage> {
     final salads = items.where((e) => e.group == 'salads').toList();
 
     return WillPopScope(
-      onWillPop: () async => true,
+      onWillPop: () async => false,
       child: Directionality(
         textDirection: TextDirection.ltr,
         child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text('المنيو',style: TextStyle(color: Colors.white) ,),
-            backgroundColor: Colors.orange,
-          automaticallyImplyLeading:false,),
           body: Column(
             children: [
+              Container(
+                width: double.infinity,
+                height: 200,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.asset(
+                      'images/caf.webp',
+                      fit: BoxFit.fill,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 15, right: 30),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.phone,
+                            color: Colors.green,
+                            size: 30,
+                          ),
+                          onPressed: () async{
+                            final Uri url = Uri(scheme: 'tel', path: '+962797332379');
+                            if (await canLaunchUrl(url)) {
+                            await launchUrl(url);
+                            } else {
+                            print('Could not launch $url');
+                            }
+
+                          },
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10,left: 20,right: 20),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child:ShaderMask(
+                          shaderCallback: (bounds) =>LinearGradient(
+                            colors: [
+                              Color(0xFFfeda75),
+                              Color(0xFFfa7e1e),
+                              Color(0xFFd62976),
+                              Color(0xFF962fbf),
+                              Color(0xFF4f5bd5),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ).createShader(bounds),
+                          child: IconButton(
+                            onPressed: _instagram,
+                            icon: FaIcon(FontAwesomeIcons.instagram),
+                            iconSize: 40,
+                            color: Colors.white,
+                          ),
+                          
+                        ),
+                      ),
+                    ),
+                  ]
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: SingleChildScrollView(
@@ -295,7 +361,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("hot_drinks"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("المشروبات الساخنة"),
@@ -304,7 +370,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("cold_coffee"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("القهوة الباردة"),
@@ -313,7 +379,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("refreshing"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("المشروبات المنعشة"),
@@ -322,7 +388,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("natural"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("المشروبات الطبيعية"),
@@ -331,7 +397,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("frappe"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("الفرايبه"),
@@ -340,7 +406,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("pasta"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("الباستا"),
@@ -349,7 +415,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("pizza"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("البيتزا"),
@@ -358,7 +424,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("argile"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("الأراجيل"),
@@ -367,7 +433,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("desserts"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("الحلويات"),
@@ -376,7 +442,7 @@ class _MenuPageState extends State<MenuPage> {
                       ElevatedButton(
                         onPressed: () => scrollToSection("salads"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.orange,
+                          backgroundColor: Colors.green,
                           foregroundColor: Colors.white,
                         ),
                         child: const Text("السلطات"),
@@ -473,7 +539,7 @@ class _SectionWidgetState extends State<SectionWidget> {
                       const SizedBox(width: 15),
                       Expanded(
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start, // ✅ تم التعديل
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(item.name, style: TextStyle(fontSize: 18)),
                             Text('السعر: ${item.price} دينار', style: TextStyle(fontSize: 16)),
@@ -489,7 +555,7 @@ class _SectionWidgetState extends State<SectionWidget> {
                             FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                           ],
                           decoration:const InputDecoration(hintText: 'عدد'),
-                          onChanged: (_) => widget.onChanged?.call(), // ✅ تم التعديل: فقط تحديث هذا العنصر
+                          onChanged: (_) => widget.onChanged?.call(),
                         ),
                       ),
                     ],

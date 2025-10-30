@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'firebase_options.dart';
 import 'pages/admin_page.dart';
 import 'pages/menu_page.dart';
@@ -12,14 +13,29 @@ void main() async {
   runApp( MyApp());
 }
 
-class MyApp extends StatelessWidget {
+
+class MyApp extends StatefulWidget {
    MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    SystemChannels.platform.setMethodCallHandler((call) async {
+      if (call.method == 'SystemNavigator.pop') {
+        return null;
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'مطعم الذكاء ',
+      title: 'ناحية ',
       theme: ThemeData(primarySwatch: Colors.orange),
       initialRoute: '/',
       routes: {
