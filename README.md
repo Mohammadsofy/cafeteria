@@ -1,47 +1,42 @@
-# Cafeteria Management System
+# ☕ Cafeteria Management System
 
-A full-featured **Cafeteria Management System** built with **Flutter** for Android, powered by **Firebase**.
-The system supports both **Admin** and **User** roles, enabling menu management and order processing through a single mobile application.
+A full-featured cafeteria management application built using Flutter and Firebase, supporting administrator and user roles through a single multi-platform application.
 
----
+Created as a training project to enhance my skills. 💪
 
-## Live Demo
-https://mohammadsofy.github.io/cafeteria/#/menu1
-https://mohammadsofy.github.io/cafeteria/#/admin
+## 🔗 Live Demo
+- 🍽️ [User Menu](https://mohammadsofy.github.io/cafeteria/#/menu1)
+- 🔧 [Administrator Dashboard](https://mohammadsofy.github.io/cafeteria/#/admin)
 
----
+## 💡 Overview
+Simulates real-world cafeteria workflow. Users browse the menu and place orders, while administrators manage items and monitor incoming orders. No custom backend required thanks to Firebase.
 
-## Overview
-This application is designed to simulate a real cafeteria workflow where users can browse the menu and place orders, while administrators manage menu items and monitor incoming orders.
-Firebase is used for authentication and data storage without the need for a custom backend server.
+## ✨ Features
 
----
-
-## Key Features
-
-### User
-- Browse cafeteria menu
+**👤 User:**
+- Browse the cafeteria menu
 - Place orders
-- Clean and responsive UI
+- Clean and responsive user interface
 
-### Admin
-- Admin dashboard
-- Manage menu items (add / edit / delete)
-- View and manage user orders
+**🔧 Administrator:**
+- Administrator dashboard
+- Add, edit, and delete menu items
+- View and manage incoming orders
 
----
+## 🛠️ Built with
+- Flutter (Dart) : cross-platform user interface
+- Firebase Authentication : login system
+- Firebase Firestore : real-time database
+- Flutter Web : web deployment
 
-## Technology Stack
-- Flutter (Dart)
-- Firebase Authentication
-- Firebase Firestore
-- Flutter Web
+## 📱 Supported platforms
+- Android
+- Web
 
----
-
-## Getting Started
-
+## 🚀 Run locally
 ```bash
 git clone https://github.com/Mohammadsofy/cafeteria.git
 flutter pub get
 flutter run
+```
+
