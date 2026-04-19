@@ -6,7 +6,6 @@ Created as a training project to enhance my skills. 💪
 
 ## 🔗 Live Demo
 - 🍽️ [User Menu](https://mohammadsofy.github.io/cafeteria/#/menu1)
-- 🔧 [Administrator Dashboard](https://mohammadsofy.github.io/cafeteria/#/admin)
 
 ## 💡 Overview
 Simulates real-world cafeteria workflow. Users browse the menu and place orders, while administrators manage items and monitor incoming orders. No custom backend required thanks to Firebase.
